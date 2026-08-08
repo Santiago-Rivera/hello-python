@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 app = APIRouter()
-router = APIRouter()
 
 # Entidad user
 class User(BaseModel):
@@ -15,10 +14,6 @@ class User(BaseModel):
 users_list = [  User(id=1, name="Santiago", surname="Rivera", url="http://rivera.dev", age=21),
                 User(id=2, name="Sinsinati", surname="Dev", url="https://sinsinatidev.com", age=35),
                 User(id=3, name="Irai", surname="Rigoberto", url="https://irei.com", age=20)]
-
-@router.get("/users")
-async def get_users():
-    return {"message": "Lista de usuarios"}
 
 @app.get("/usersjson")
 async def usersjson():
