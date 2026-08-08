@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI()
+app = APIRouter()
 
 # Entidad user
 class User(BaseModel):
@@ -36,9 +36,8 @@ async def user(id: int):
 @app.post("/user/")
 async def user_post(user: User):
     if type(search_user(user.id)) == User:
-        return {"error": "El usuario ya existe"}
-    else:
-        users_list.append(user)
+        raise HTTPException(status_code=404, detail="El usuario ya existe")
+    users_list.append(user)
     return user
 
 @app.put("/user/")
@@ -50,8 +49,7 @@ async def user_put(user: User):
             found = True
     if not found:
         return {"error": "No se ha actualizado el usuario"}
-    else:
-        return user
+    return user
 
 @app.delete("/user/{id}")
 async def user_delete(id: int):
@@ -62,7 +60,6 @@ async def user_delete(id: int):
                 found = True
     if not found:
         return {"error": "No se ha eliminado el usuario"}
-    
 
 def search_user(id: int):
     users = filter (lambda user: user.id == id, users_list)
