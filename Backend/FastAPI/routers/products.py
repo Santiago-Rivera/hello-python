@@ -8,10 +8,12 @@ router = APIRouter(
 
 products_list = ["Producto 1", "Producto 2", "Producto 3", "Producto 4", "Producto 5"]
 
+
 @router.get("/")
-async def products():
+async def products(): # type: ignore
     return products_list
 
+
 @router.get("/{id}")
-async def products_id(id: int):
+async def products(id: int):
     return products_list[id]
