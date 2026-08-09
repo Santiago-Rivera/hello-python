@@ -19,13 +19,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Url local: http://127.0.0.1:8000
 
-@app.get("/") # type: ignore
+@app.get("/") 
 async def root():
     return "Hola FastAPI!"
 
 # Url local: http://127.0.0.1:8000/url
 
-@app.get("/url") # type: ignore
+@app.get("/url") 
 async def url():
     return {"url": "https://mouredev.com/python"}
 

@@ -12,6 +12,6 @@ my_typed_variable: str = "My tiped string variable"
 print(my_typed_variable)
 print(type(my_typed_variable))
 
-my_typed_variable = 5 # type: ignore
+my_typed_variable = "5"
 print(my_typed_variable)
 print(type(my_typed_variable))

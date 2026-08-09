@@ -63,12 +63,16 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
                             detail="El usuario no es correcto")
 
     user = search_user_db(form.username)
-    if form.password != user.password: # type: ignore
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="El usuario no es correcto")
+
+    if form.password != user.password:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="La contraseña no es correcta")
 
-    return {"access_token": user.username, "token_type": "bearer"} # type: ignore
+    return {"access_token": user.username, "token_type": "bearer"} 
 
-@router.get("/users/me") # type: ignore
+@router.get("/users/me") 
 async def me(user: User = Depends(current_user)):
     return user

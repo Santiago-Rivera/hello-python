@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt # type: ignore
+from jose import JWTError, jwt 
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 
@@ -95,12 +95,16 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
             status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario no es correcto")
 
     user = search_user_db(form.username)
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario no es correcto")
 
-    if not crypt.verify(form.password, user.password): # type: ignore
+    if not crypt.verify(form.password, user.password): 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="La contraseña no es correcta")
 
-    access_token = {"sub": user.username, # type: ignore
+    access_token = {"sub": user.username, 
                     "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_DURATION)}
 
     return {"access_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM), "token_type": "bearer"}
