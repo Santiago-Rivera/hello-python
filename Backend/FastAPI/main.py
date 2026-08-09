@@ -15,7 +15,7 @@ app.include_router(jwt_auth_users.router)
 
 app.include_router(users_db.router)
 
-app.mount("/static", StaticFiles(directory="static"), name="static") # pyright: ignore[reportGeneralTypeIssues]
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Url local: http://127.0.0.1:8000
 
