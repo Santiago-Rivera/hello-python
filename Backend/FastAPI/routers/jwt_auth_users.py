@@ -1,13 +1,24 @@
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt 
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
+from dotenv import load_dotenv
+import os
 
-ALGORITHM = "HS256"
-ACCESS_TOKEN_DURATION = 1
-SECRET = "9699c17d1aab23eb3b2a26e43f13701138a8b5a3bd88ca5f35331bdb31deb864"
+load_dotenv()
+
+JWT_SECRET = os.getenv("JWT_SECRET")
+JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+
+ALGORITHM: str = JWT_ALGORITHM
+ACCESS_TOKEN_DURATION = int(os.getenv("ACCESS_TOKEN_DURATION", "30"))
+
+if JWT_SECRET is None:
+    raise RuntimeError("JWT_SECRET no está configurado")
+
+SECRET: str = JWT_SECRET
 
 router = APIRouter(
     prefix="/jwtauth",
@@ -100,11 +111,11 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario no es correcto")
 
-    if not crypt.verify(form.password, user.password): 
+    if not crypt.verify(form.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="La contraseña no es correcta")
 
-    access_token = {"sub": user.username, 
+    access_token = {"sub": user.username,
                     "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_DURATION)}
 
     return {"access_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM), "token_type": "bearer"}
