@@ -1,7 +1,9 @@
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
-# db_client = MongoClient().local
+load_dotenv()
 
-db_client = MongoClient(
-    "mongodb+srv://santiago:santiago@cluster0.dpbe7sm.mongodb.net/"
-    ).santiago
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+db_client = MongoClient(MONGODB_URI).santiago
