@@ -1,5 +1,9 @@
 import unittest
-from codigo import dividir
+
+def dividir(a, b):
+    if b == 0:
+        raise ValueError("No se puede dividir por cero")
+    return a / b
 
 class TestDividir(unittest.TestCase):
 
